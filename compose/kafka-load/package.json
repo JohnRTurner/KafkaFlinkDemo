@@ -1,0 +1,23 @@
+{
+  "name": "kafkagenerator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js"
+  },
+  "keywords": [],
+  "author": "John R. Turner",
+  "license": "ISC",
+  "dependencies": {
+    "@faker-js/faker": "^8.0.2",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "node-rdkafka": "^2.17.0",
+    "workerpool": "^6.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
