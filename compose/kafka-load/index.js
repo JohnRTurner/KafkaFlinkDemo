@@ -1,4 +1,5 @@
 const workerpool = require("workerpool")
+const fs = require("fs");
 
 const clientId = "kafkaGenerator"
 const brokers = process.env.Brokers
@@ -10,12 +11,30 @@ const batchesPerRun = 10
 const pool = workerpool.pool("./worker.js",
     {minWorkers: kafkaThreads, maxWorkers: kafkaThreads, workerType: 'process'});
 
+let hasCerts = true
+try {
+    let statsObj = fs.statSync("../certs/ca.pem");
+} catch (e){
+    hasCerts = false
+}
+try {
+    let statsObj = fs.statSync("../certs/service.key");
+} catch (e){
+    hasCerts = false
+}
+try {
+    let statsObj = fs.statSync("../certs/service.cert");
+} catch (e){
+    hasCerts = false
+}
+
 console.log(`Passed parameters -- Brokers:${brokers} TopicName:${topicName} RunSeconds:${runSeconds}`);
-console.log(`Hard Coded -- ClientID:${clientId}  BatchesPerRun:${batchesPerRun} `);
+console.log(`Hard Coded -- ClientID:${clientId}  BatchesPerRun:${batchesPerRun}`);
+console.log(`Derived from certs directory -- HasCerts:${hasCerts}`);
 let runningBatch = [];
 for(let kafkaThread = 0; kafkaThread < kafkaThreads; kafkaThread++) {
     runningBatch[kafkaThread] = 0;
-    pool.exec('startKafkaGenerator', [clientId, brokers, topicName, batchesPerRun, runSeconds], {
+    pool.exec('startKafkaGenerator', [clientId, hasCerts, brokers, topicName, batchesPerRun, runSeconds], {
         on: function (payload) {
             if (payload.status === 'Producer running'){
                 runningBatch[kafkaThread]++;

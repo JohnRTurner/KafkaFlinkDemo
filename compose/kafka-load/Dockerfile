@@ -1,5 +1,10 @@
 FROM node:18
 
+# Create certs directory
+WORKDIR /usr/src/certs
+
+COPY certs/* ./
+
 # Create app directory
 WORKDIR /usr/src/app
 

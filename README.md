@@ -26,13 +26,16 @@ Kafka-load is multiprocess to allow testing at high concurrency.
 | RunSeconds   | How long to Create Records            |
 | KafkaThreads | Concurrency of Loader                 |
 
-### Files
-
+### Application Files
 - **compose/docker-compose.yml** - Deploys the program and is where the parameters are updated
-- **env** - Used to pass parameters to docker-compose.yml
+- **compose/.env** - Used to pass parameters to docker-compose.yml
 - **compose/kafka-load/Dockerfile** - Creates the kafka-load docker
-- **compose/package.json** - Used to by npm to build the Node.js includes library versions
-- **index.js** - The main application module used to configure and start distinct worker processes.
-- **worker.js** -Each worker.js is a separate process that generates and uploads data to Kafka
+- **compose/kafka-load/package.json** - Used to by npm to build the Node.js includes library versions
+- **compose/kafka-load/index.js** - The main application module used to configure and start distinct worker processes.
+- **compose/kafka-load/worker.js** -Each worker.js is a separate process that generates and uploads data to Kafka
 
+### Certificate Files
+- **compose/kafka-load/certs/ca.pem** - the CA certificate for the Kafka cluster
+- **compose/kafka-load/certs/service.cert** - the access certificate for the Kafka cluster
+- **compose/kafka-load/certs/service.key** - the access key for the Kafka cluster
 

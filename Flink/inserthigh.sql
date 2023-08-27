@@ -1,0 +1,1 @@
+insert into highprice select * from rawdata where price >= 50

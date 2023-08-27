@@ -3,9 +3,20 @@ const Kafka = require("node-rdkafka")
 const workerpool = require('workerpool')
 
 /* This function creates a single generator*/
-async function startKafkaGenerator(clientId, brokers, topicName, batchesPerRun, runSeconds){
+async function startKafkaGenerator(clientId, hasCerts, brokers, topicName, batchesPerRun, runSeconds){
     let rowsPerBatch = 1000
-    let producer= new Kafka.Producer({'client.id':clientId, 'metadata.broker.list': brokers, 'dr_cb': true });
+    let producer= null
+    if(hasCerts){
+        producer = new Kafka.Producer({'client.id': clientId,
+            'metadata.broker.list': brokers,
+            'security.protocol': 'ssl',
+            'ssl.key.location': '../certs/service.key',
+            'ssl.certificate.location': '../certs/service.cert',
+            'ssl.ca.location': '../certs/ca.pem',
+            'dr_cb': true});
+    }else {
+        producer = new Kafka.Producer({'client.id': clientId, 'metadata.broker.list': brokers, 'dr_cb': true});
+    }
     let producerReady = false;
     producer.connect();
     producer.on('event.error', function(err) {
@@ -48,10 +59,13 @@ async function startKafkaGenerator(clientId, brokers, topicName, batchesPerRun, 
                         }
                         producer.produce(topicName, null, Buffer.from(JSON.stringify(message)))
                     }
-                    // producer.flush();
+                    producer.flush();
                 } catch (err) {
+                    if(err.message === 'Local: Queue full'){
+                        await sleep2(2);
+                    }
                     workerpool.workerEmit({
-                        status: `A problem occurred when sending message`,
+                        status: `A problem occurred when sending message: ${err.message}`,
                     });
 
                 }
@@ -62,7 +76,7 @@ async function startKafkaGenerator(clientId, brokers, topicName, batchesPerRun, 
                 status: '`Producer is not ready. Connected: ${producer.isConnected()}  Last Error: ${producer.getLastError()?.message}',
             });
         }
-    }, 1000);
+    }, 2000);
 
     await sleep2(runSeconds);
     clearInterval(kafkaThread);
@@ -70,9 +84,9 @@ async function startKafkaGenerator(clientId, brokers, topicName, batchesPerRun, 
     return true;
 }
 
-function sleep2(ms) {
+function sleep2(seconds) {
     return new Promise(resolve => {
-        setTimeout(() => { resolve(ms * 1000); }, ms * 1000);
+        setTimeout(() => { resolve(seconds * 1000); }, seconds * 1000);
     });
 }
 

@@ -25,5 +25,8 @@
 hs_err_pid*
 replay_pid*
 
-/compose/kafka-load/node_modules/
-/compose/kafka-load/package-lock.json
+node_modules/
+package-lock.json
+*.cert
+*.key
+*.pem
