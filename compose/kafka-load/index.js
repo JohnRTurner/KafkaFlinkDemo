@@ -13,17 +13,17 @@ const pool = workerpool.pool("./worker.js",
 
 let hasCerts = true
 try {
-    let statsObj = fs.statSync("../certs/ca.pem");
+    fs.statSync("../certs/ca.pem");
 } catch (e){
     hasCerts = false
 }
 try {
-    let statsObj = fs.statSync("../certs/service.key");
+    fs.statSync("../certs/service.key");
 } catch (e){
     hasCerts = false
 }
 try {
-    let statsObj = fs.statSync("../certs/service.cert");
+    fs.statSync("../certs/service.cert");
 } catch (e){
     hasCerts = false
 }
