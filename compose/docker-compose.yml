@@ -9,4 +9,4 @@ services:
       Brokers: "kafka-1930c95-jrt13a-c2b8.aivencloud.com:22526"
       TopicName: rawdata
       KafkaThreads: 2
-      RunSeconds: 300
+      RunSeconds: 60
