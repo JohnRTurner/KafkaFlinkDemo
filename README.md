@@ -3,7 +3,6 @@ This Demo uses the kafka-load application to upload data to Kafka,
 split the data into two additional topics using Flink,
 and push the Kafka metrics into InfluxDB for reporting through a Grafana dashboard.
 
-A video can be seen [here](video/KafkaFlinkDemo.mp4).
 
 ## Demo Steps
 1. Create **Kafka** cluster and topics
