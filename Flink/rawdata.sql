@@ -14,7 +14,7 @@ CREATE TABLE rawdata (
                        `price` FLOAT
 ) WITH (
       'connector' = 'kafka',
-      'properties.bootstrap.servers' = 'kafka-1930c95-jrt13a-c2b8.aivencloud.com:22526',
+      'properties.bootstrap.servers' = 'kafka-2d779090-jrt13a-c2b8.aivencloud.com:22526',
       'scan.startup.mode' = 'earliest-offset',
       'topic' = 'rawdata',
       'value.format' = 'json'
